@@ -26,6 +26,8 @@ const initialValues = {
   bankingDetails: "",
   outcome: "",
   address: "",
+  agent: "",
+  source: "",
 };
 
 const URL = "https://hooks.zapier.com/hooks/catch/14132423/bvbhar9/";
@@ -157,6 +159,19 @@ const Form = () => {
                 onChange={formik.handleChange}
                 size="small"
               />
+              <TextField
+                fullWidth
+                id="agent"
+                name="agent"
+                label="Agent"
+                variant="outlined"
+                margin="normal"
+                multiline
+                maxRows={4}
+                value={formik.values.agent}
+                onChange={formik.handleChange}
+                size="small"
+              />
             </Box>
             <Box>
               <TextField
@@ -223,8 +238,23 @@ const Form = () => {
                   <MenuItem value="Not Interested">Not Interested</MenuItem>
                   <MenuItem value="Pending App">Pending App</MenuItem>
                   <MenuItem value="Sold">Sold</MenuItem>
+                  <MenuItem value="disconnected">Disconnected</MenuItem>
                 </Select>
               </FormControl>
+
+              <TextField
+                fullWidth
+                id="source"
+                name="source"
+                label="Source"
+                variant="outlined"
+                margin="normal"
+                multiline
+                maxRows={4}
+                value={formik.values.source}
+                onChange={formik.handleChange}
+                size="small"
+              />
 
               
             </Box>

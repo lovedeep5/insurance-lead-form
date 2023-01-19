@@ -1,0 +1,5 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/x8a03tpndez4/public_html/24hourins.com/leads
+    - /bin/cp * $DEPLOYPATH
