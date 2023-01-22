@@ -9,10 +9,8 @@ import Select from "@mui/material/Select";
 import { Paper } from "@mui/material";
 import { useFormik } from "formik";
 import axios from "axios";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const initialValues = {
   fullName: "",
@@ -28,19 +26,19 @@ const initialValues = {
   address: "",
   agent: "",
   source: "",
+  notes: "",
+  socialSecurity: "",
 };
 
 const URL = "https://hooks.zapier.com/hooks/catch/14132423/bvbhar9/";
 const Form = () => {
-
-  const [message, setMessage] = useState(null);
+  const [message, setMessage] = useState("Success");
 
   const notify = () => toast(message);
 
   const formik = useFormik({
     initialValues,
-    onSubmit: async (values, {resetForm}) => {
-      console.log(values);
+    onSubmit: async (values, { resetForm }) => {
       try {
         const request = await axios.get(
           URL,
@@ -54,31 +52,28 @@ const Form = () => {
           }
         );
         console.log("Success", request);
-        if(request.status === 200){
-          setMessage("Record Created Successfully.")
+        if (request.status === 200) {
+          setMessage("Record Created Successfully.");
           // console.log('Record Created Successfully.');
           notify();
-          resetForm();
         } else {
-          setMessage("Something went wrong, try again.")
+          setMessage("Something went wrong, try again.");
           notify();
 
           // console.log('Something went wrong, try again.');
         }
       } catch (error) {
-        // console.log('Something went wrong, try again.');
-        setMessage("Something went wrong, try again.")
+        console.log("Error", error);
+        setMessage("Something went wrong, try again.");
         notify();
-
       }
     },
   });
   const resetForm = () => {
     formik.resetForm({
-      initialValues
+      initialValues,
     });
-
-  }
+  };
   return (
     <>
       <Paper
@@ -96,11 +91,10 @@ const Form = () => {
       >
         Lead Form
       </Paper>
-
-      <Box sx={{ maxWidth: "800px", margin: "0 auto", padding: "15px" }}>
-        <form onSubmit={formik.handleSubmit}>
+      <form onSubmit={formik.handleSubmit}>
+        <Box sx={{ maxWidth: "800px", margin: "0 auto", padding: "15px" }}>
           <Box sx={{ display: "flex", gap: "20px" }}>
-            <Box>
+            <Box >
               <TextField
                 fullWidth
                 name="fullName"
@@ -135,17 +129,30 @@ const Form = () => {
                 onChange={formik.handleChange}
                 size="small"
               />
-              <TextField
-                fullWidth
-                name="monthlyPayment"
-                id="monthlyPayment"
-                label="Monthly payment"
-                variant="outlined"
-                margin="normal"
-                value={formik.values.monthlyPayment}
-                onChange={formik.handleChange}
-                size="small"
-              />
+              <Box sx={{ display: "flex", gap: "10px" }}>
+                <TextField
+                  fullWidth
+                  name="monthlyPayment"
+                  id="monthlyPayment"
+                  label="Monthly payment"
+                  variant="outlined"
+                  margin="normal"
+                  value={formik.values.monthlyPayment}
+                  onChange={formik.handleChange}
+                  size="small"
+                />
+                <TextField
+                  fullWidth
+                  name="faceAmount"
+                  id="faceAmount"
+                  label="Face Amount"
+                  variant="outlined"
+                  margin="normal"
+                  value={formik.values.faceAmount}
+                  onChange={formik.handleChange}
+                  size="small"
+                />
+              </Box>
               <TextField
                 fullWidth
                 id="health"
@@ -173,7 +180,7 @@ const Form = () => {
                 size="small"
               />
             </Box>
-            <Box>
+            <Box sx={{width: '100%'}}>
               <TextField
                 fullWidth
                 name="email"
@@ -183,6 +190,18 @@ const Form = () => {
                 type="email"
                 margin="normal"
                 value={formik.values.email}
+                onChange={formik.handleChange}
+                size="small"
+              />
+
+              <TextField
+                fullWidth
+                id="socialSecurity"
+                name="socialSecurity"
+                label="Social Security"
+                variant="outlined"
+                margin="normal"
+                value={formik.values.socialSecurity}
                 onChange={formik.handleChange}
                 size="small"
               />
@@ -206,18 +225,6 @@ const Form = () => {
                 variant="outlined"
                 margin="normal"
                 value={formik.values.bankingDetails}
-                onChange={formik.handleChange}
-                size="small"
-              />
-
-              <TextField
-                fullWidth
-                name="faceAmount"
-                id="faceAmount"
-                label="Face Amount"
-                variant="outlined"
-                margin="normal"
-                value={formik.values.faceAmount}
                 onChange={formik.handleChange}
                 size="small"
               />
@@ -255,26 +262,37 @@ const Form = () => {
                 onChange={formik.handleChange}
                 size="small"
               />
-
-              
             </Box>
-            
           </Box>
           <Box sx={{ padding: "10px 0px" }}>
-          <TextField
-                fullWidth
-                id="address"
-                name="address"
-                label="Address"
-                variant="outlined"
-                type="text"
-                margin="normal"
-                multiline
-                maxRows={4}
-                value={formik.values.address}
-                onChange={formik.handleChange}
-                size="small"
-              />
+            <TextField
+              fullWidth
+              id="address"
+              name="address"
+              label="Address"
+              variant="outlined"
+              type="text"
+              margin="normal"
+              multiline
+              maxRows={4}
+              value={formik.values.address}
+              onChange={formik.handleChange}
+              size="small"
+            />
+            <TextField
+              fullWidth
+              id="notes"
+              name="notes"
+              label="Notes"
+              variant="outlined"
+              type="text"
+              margin="normal"
+              multiline
+              maxRows={4}
+              value={formik.values.notes}
+              onChange={formik.handleChange}
+              size="small"
+            />
             <Button
               type="submit"
               variant="contained"
@@ -287,10 +305,10 @@ const Form = () => {
               Reset
             </Button>
           </Box>
-        </form>
-      </Box>
-      <ToastContainer />
+        </Box>
+      </form>
 
+      <ToastContainer />
     </>
   );
 };
